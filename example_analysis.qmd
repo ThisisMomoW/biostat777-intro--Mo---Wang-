@@ -1,0 +1,145 @@
+---
+title: "Example analysis: Iris Dataset"
+author: "Mo Wang"
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  echo: true
+  warning: false
+  message: false
+bibliography: references.bib
+---
+
+```{r setup}
+#| include: false
+# knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+::: {.callout-note}
+**Question**  
+How do the Iris's sepal and petal differ across the three iris species?
+:::
+
+::: {.callout-tip}
+**Intended audience**  
+Botanists who want to study how the Iris's species influence its dimenstions.
+:::
+
+**Data source**  
+The `iris` dataset is already built in base R. It contains measurements of sepal length, sepal width, petal length, and petal width for 150 iris flowers across species: setosa, versicolor, and virginica.  
+- Data documentation: <https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/iris.html>
+
+ ![](image/iris_image.jpg){fig-align="center" width="60%" fig-alt="Iris flower" fig-cap="Iris versicolor — example of one species in the dataset."}
+
+
+::: margin
+Margin note:
+This small dataset is one of the most famous in data science, first used by Fisher[@fisher1936] in his landmark paper on discriminant analysis.
+:::
+---
+## Data dictionary for `iris`
+```{r}
+#| echo: false
+#| results: 'asis'
+
+tibble::tribble(
+~Variable,        ~Description,
+"sepal.length",   "Length of the sepal (cm)",
+"sepal.width",    "Width of the sepal (cm)",
+"petal.length",   "Length of the petal (cm)",
+"petal.width",    "Width of the petal (cm)",
+"species",        "Iris species (setosa, versicolor, virginica)"
+) |>
+knitr::kable(caption = "Data dictionary for the iris dataset used in this analysis.")
+```
+
+## Load and wrangle data
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Clean + wrangle iris data
+# Clean data
+iris_full <- iris |>
+  rename_with(tolower) |>
+  rename_with(~ gsub("\\.", "_", .x)) |>
+  mutate(
+    species = as.factor(species),
+    ratio   = petal_length / sepal_length
+  ) |>
+  filter(sepal_length > 4)
+
+
+# A separate summary table
+iris_summary <- iris_full |>
+  group_by(species) |>
+  summarise(
+    mean_sepal_length  = mean(sepal_length),
+    mean_petal_length  = mean(petal_length),
+    mean_ratio         = mean(ratio),
+    n                  = dplyr::n(),
+    .groups = "drop"
+  )
+
+# View cleaned summary
+head(iris_summary)
+```
+
+## Three Plots
+```{r}
+## Three plots
+
+# Plot 1
+ggplot(iris_full, aes(sepal_length, petal_length, color = species)) +
+geom_point(size = 2) +
+geom_smooth(method = "lm", se = FALSE) +
+labs(
+title = "Petal vs Sepal Length by Species",
+subtitle = "Linear trends show differences among species",
+x = "Sepal Length (cm)",
+y = "Petal Length (cm)",
+color = "Species"
+)
+
+# Plot 2
+ggplot(iris_full, aes(species, sepal_width, fill = species)) +
+geom_boxplot(alpha = 0.6) +
+facet_wrap(~ species) +
+labs(
+title = "Distribution of Sepal Width by Species",
+subtitle = "Setosa has the largest median sepal width; Versicolor and Virginica show narrower distributions",
+x = "Species", y = "Sepal Width (cm)"
+)
+
+#Plot 3
+ggplot(iris_full, aes(petal_width, fill = species)) +
+geom_density(alpha = 0.4) +
+labs(
+title = "Distribution of Petal Width across Species",
+subtitle = "Setosa petals are much thinner than the other two species; Virginica shows the widest spread",
+x = "Petal Width (cm)", y = "Density"
+)
+
+
+```
+
+**Summary of results**
+Setosa flowers are clearly smaller, with short petals and wide sepals.
+
+Virginica flowers tend to be the largest across all dimensions.
+
+Versicolor serves as a middle group, overlapping partially with the other two.
+
+Linear trends suggest strong correlations between petal and sepal measurements.
+
+The density plots show clean species separation, which is why iris is often used for classification.
+
+**Functions used**
+
+From dplyr/tidyr [@wickham2023dplyr]:
+rename_with(), mutate(), filter(), group_by(), summarise(), across()
+
+From ggplot2 [@wickham2016ggplot2]:
+geom_point(), geom_smooth(), geom_boxplot(), geom_density(), facet_wrap(), labs()

@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome",
+    "section": "",
+    "text": "Hello, I’m Mo Wang, a first year ScM Biostatistics student. I am from China and finished my undergrad in the UK. The photo attached is Daniel Lozakovich with London Philharmonic Orchestra. Daniel is my favorite violinist, he is elegant and charming."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "I completed my BSc in Statistics at UCL (University College London), where I found an open, kind community， and plenty of chances to take day trips to towns around London.\nIn my free time I do pilates, play golf and bake\nI also love to travel, when I was in the UK I visited Spain every vacation.\nI’m a huge fan of classical music (let’s go to a concert!).\nFavorites: Sergei Rachmaninoff (composer), Daniil Trifonov (pianist) and Daniel Lozakovich (violinist).\nNow in my first year at JHU Biostatistics, I’m exploring widely, with growing interests in spatial data and causal inference.\n\nFun facts\n\nBest day trip near London: Winchester.\nComfort bake: Matcha cheesecake."
+  },
+  {
+    "objectID": "example_analysis.html",
+    "href": "example_analysis.html",
+    "title": "Example analysis: Iris Dataset",
+    "section": "",
+    "text": "Note\n\n\n\nQuestion\nHow do the Iris’s sepal and petal differ across the three iris species?\nData source\nThe iris dataset is already built in base R. It contains measurements of sepal length, sepal width, petal length, and petal width for 150 iris flowers across species: setosa, versicolor, and virginica.\n- Data documentation: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/iris.html"
+  },
+  {
+    "objectID": "example_analysis.html#data-dictionary-for-iris",
+    "href": "example_analysis.html#data-dictionary-for-iris",
+    "title": "Example analysis: Iris Dataset",
+    "section": "Data dictionary for iris",
+    "text": "Data dictionary for iris\n\nData dictionary for the iris dataset used in this analysis.\n\n\nVariable\nDescription\n\n\n\n\nsepal.length\nLength of the sepal (cm)\n\n\nsepal.width\nWidth of the sepal (cm)\n\n\npetal.length\nLength of the petal (cm)\n\n\npetal.width\nWidth of the petal (cm)\n\n\nspecies\nIris species (setosa, versicolor, virginica)"
+  },
+  {
+    "objectID": "example_analysis.html#load-and-wrangle-data",
+    "href": "example_analysis.html#load-and-wrangle-data",
+    "title": "Example analysis: Iris Dataset",
+    "section": "Load and wrangle data",
+    "text": "Load and wrangle data\n\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\n# Clean + wrangle iris data\n# Clean data\niris_full &lt;- iris |&gt;\n  rename_with(tolower) |&gt;\n  rename_with(~ gsub(\"\\\\.\", \"_\", .x)) |&gt;\n  mutate(\n    species = as.factor(species),\n    ratio   = petal_length / sepal_length\n  ) |&gt;\n  filter(sepal_length &gt; 4)\n\n\n# A separate summary table\niris_summary &lt;- iris_full |&gt;\n  group_by(species) |&gt;\n  summarise(\n    mean_sepal_length  = mean(sepal_length),\n    mean_petal_length  = mean(petal_length),\n    mean_ratio         = mean(ratio),\n    n                  = dplyr::n(),\n    .groups = \"drop\"\n  )\n\n# View cleaned summary\nhead(iris_summary)\n\n# A tibble: 3 × 5\n  species    mean_sepal_length mean_petal_length mean_ratio     n\n  &lt;fct&gt;                  &lt;dbl&gt;             &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;\n1 setosa                  5.01              1.46      0.293    50\n2 versicolor              5.94              4.26      0.718    50\n3 virginica               6.59              5.55      0.844    50"
+  },
+  {
+    "objectID": "example_analysis.html#three-plots",
+    "href": "example_analysis.html#three-plots",
+    "title": "Example analysis: Iris Dataset",
+    "section": "Three Plots",
+    "text": "Three Plots\n\n## Three plots\n\n# Plot 1\nggplot(iris_full, aes(sepal_length, petal_length, color = species)) +\ngeom_point(size = 2) +\ngeom_smooth(method = \"lm\", se = FALSE) +\nlabs(\ntitle = \"Petal vs Sepal Length by Species\",\nsubtitle = \"Linear trends show differences among species\",\nx = \"Sepal Length (cm)\",\ny = \"Petal Length (cm)\",\ncolor = \"Species\"\n)\n\n\n\n\n\n\n\n# Plot 2\nggplot(iris_full, aes(species, sepal_width, fill = species)) +\ngeom_boxplot(alpha = 0.6) +\nfacet_wrap(~ species) +\nlabs(\ntitle = \"Distribution of Sepal Width by Species\",\nsubtitle = \"Setosa has the largest median sepal width; Versicolor and Virginica show narrower distributions\",\nx = \"Species\", y = \"Sepal Width (cm)\"\n)\n\n\n\n\n\n\n\n#Plot 3\nggplot(iris_full, aes(petal_width, fill = species)) +\ngeom_density(alpha = 0.4) +\nlabs(\ntitle = \"Distribution of Petal Width across Species\",\nsubtitle = \"Setosa petals are much thinner than the other two species; Virginica shows the widest spread\",\nx = \"Petal Width (cm)\", y = \"Density\"\n)\n\n\n\n\n\n\n\n\nSummary of results Setosa flowers are clearly smaller, with short petals and wide sepals.\nVirginica flowers tend to be the largest across all dimensions.\nVersicolor serves as a middle group, overlapping partially with the other two.\nLinear trends suggest strong correlations between petal and sepal measurements.\nThe density plots show clean species separation, which is why iris is often used for classification.\nFunctions used\nFrom dplyr/tidyr (Wickham et al. 2023): rename_with(), mutate(), filter(), group_by(), summarise(), across()\nFrom ggplot2 (Wickham 2016): geom_point(), geom_smooth(), geom_boxplot(), geom_density(), facet_wrap(), labs()"
+  }
+]

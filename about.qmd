@@ -1,0 +1,23 @@
+---
+title: "About Me"
+format:
+  html:
+    toc: false
+
+---
+
+I completed my **BSc in Statistics at UCL (University College London)**, where I found an open, kind community， and plenty of chances to take day trips to towns around London.
+
+In my free time I do **pilates**, **play golf** and **bake**
+
+I also love to **travel**, when I was in the UK I visited **Spain** every vacation.
+
+I’m a huge fan of **classical music** (let’s go to a concert!).  
+Favorites: **Sergei Rachmaninoff** (composer), **Daniil Trifonov** (pianist) and **Daniel Lozakovich** (violinist).
+
+Now in my first year at **JHU Biostatistics**, I’m exploring widely, with growing interests in **spatial data** and **causal inference**.
+
+#### Fun facts
+- Best day trip near London: **Winchester**.
+- Comfort bake: **Matcha cheesecake**.
+

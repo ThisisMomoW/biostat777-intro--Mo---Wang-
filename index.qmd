@@ -1,0 +1,9 @@
+---
+title: "Welcome"
+---
+
+Hello, I’m Mo Wang, a first year ScM Biostatistics student. I am from China and finished my undergrad in the UK.
+The photo attached is Daniel Lozakovich with London Philharmonic Orchestra. Daniel is my favorite violinist, he is elegant and charming.
+
+![](image/IMG_1118.jpg){fig-align="center" width="50%" fig-alt="Photo of Daniel Lozakovich" fig-cap="Daniel Lozakovich"}
+
